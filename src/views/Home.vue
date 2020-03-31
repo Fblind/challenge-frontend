@@ -1,6 +1,8 @@
 <template>
   <v-content>
-    <Post :post="post" v-for="post of posts" :key="post.id"/>
+    <transition-group name="list">
+      <Post :post="post" v-for="post of posts" :key="post.id" class="list-item"/>
+    </transition-group>
   </v-content>
 </template>
 
@@ -21,3 +23,13 @@ export default {
   methods: {...mapActions(["fetchPosts"])},
 }
 </script>
+
+<style>
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>

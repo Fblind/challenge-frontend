@@ -7,7 +7,7 @@
       <v-col class="pb-1">
       </v-col>
       <v-col :cols="1" class="pb-1">
-        <v-icon>close</v-icon>
+        <v-icon @click="removePost(post)">close</v-icon>
       </v-col>
     </v-row>
     <v-row class="content" @click="setPostViewed(post)">
@@ -37,7 +37,7 @@ export default {
       return moment(utc).fromNow();
     }
   },
-  methods: {...mapMutations(["setPostViewed"])}
+  methods: {...mapMutations(["setPostViewed", "removePost"])}
 }
 </script>
 
