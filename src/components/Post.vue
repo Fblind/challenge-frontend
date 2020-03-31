@@ -16,7 +16,7 @@
       </v-col>
       <v-col class="post-info pt-0 pl-0" :align-self="'center'">
         <h1>{{post.title}}</h1>
-        <span><h6>{{post.created_utc}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
+        <span><h6>{{post.created_utc | fromNow}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
       </v-col>
       <v-col :cols="1" :align-self="'center'" class="pt-0">
         <v-icon>chevron_right</v-icon>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "Post",
   data() {
@@ -76,7 +77,12 @@ export default {
         "distinguished": null
       }
     }
-  }
+  },
+  filters: {
+    fromNow(utc) {
+      return moment(utc).fromNow();
+    }
+  },
 }
 </script>
 
