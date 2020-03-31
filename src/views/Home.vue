@@ -3,18 +3,21 @@
     <transition-group name="list">
       <Post :post="post" v-for="post of posts" :key="post.id" class="list-item"/>
     </transition-group>
+    <PostView :post="posts[0]"/>
   </v-content>
 </template>
 
 <script>
 // @ is an alias to /src
 import Post from '@/components/Post.vue'
+import PostView from '@/components/PostView.vue'
 import {mapState, mapActions} from "vuex"
 
 export default {
   name: 'Home',
   components: {
-    Post
+    Post,
+    PostView,
   },
   created() {
     this.fetchPosts();
