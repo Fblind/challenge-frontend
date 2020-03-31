@@ -19,7 +19,7 @@ function getPosts() {
 
 // utils posts
 function castPost(post) {
-  const overrides = {};
+  const overrides = {viewed: false};
   const invalidThumbnails = ["default", "nsfw", "self"];
   if (invalidThumbnails.includes(post.thumbnail)) {
     overrides.thumbnail = null;
@@ -35,6 +35,10 @@ export default new Vuex.Store({
   mutations: {
     setPosts(state, posts) {
       state.posts = posts;
+    },
+    setPostViewed(state, post) {
+      const postIndex = state.posts.findIndex(p => p.id === post.id);
+      state.posts[postIndex].viewed = true;
     }
   },
   actions: {

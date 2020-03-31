@@ -1,5 +1,5 @@
 <template>
-  <v-container flex class="post-item">
+  <v-container flex class="post-item" :class="post.viewed ? 'post-item-viewed' : ''">
     <v-row>
       <v-col :cols="4" class="pb-1">
         <h1 class="author">{{post.author}}</h1>
@@ -10,7 +10,7 @@
         <v-icon>close</v-icon>
       </v-col>
     </v-row>
-    <v-row class="content">
+    <v-row class="content" @click="setPostViewed(post)">
       <v-col :cols="4" class="pt-0 pr-0" v-if="post.thumbnail">
         <v-img class="thumbnail" :src="post.thumbnail"></v-img>
       </v-col>
@@ -27,6 +27,7 @@
 
 <script>
 import moment from "moment";
+import {mapMutations} from "vuex";
 
 export default {
   name: "Post",
@@ -36,6 +37,7 @@ export default {
       return moment(utc).fromNow();
     }
   },
+  methods: {...mapMutations(["setPostViewed"])}
 }
 </script>
 
@@ -45,6 +47,10 @@ export default {
   box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.5);
   width: 500px;
   border-left: 3px solid grey;
+}
+
+.post-item-viewed {
+  border-left: 3px solid green;
 }
 
 .post-item .author {
