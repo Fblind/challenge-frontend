@@ -39,11 +39,18 @@ export default new Vuex.Store({
     },
     removePost(state, post) {
       state.posts.splice(state.posts.indexOf(post), 1);
+      if (post.id === state.currentPost.id) {
+        state.currentPost = null;
+      }
     },
     setCurrentPost(state, post) {
       const postIndex = state.posts.findIndex(p => p.id === post.id);
       state.posts[postIndex].viewed = true;
       state.currentPost = post;
+    },
+    removeAllPosts(state) {
+      state.posts = [];
+      state.currentPost = null;
     }
   },
   actions: {

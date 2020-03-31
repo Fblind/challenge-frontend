@@ -12,6 +12,9 @@
       <transition-group name="list">
         <Post :post="post" v-for="post of posts" :key="post.id" class="list-item"/>
       </transition-group>
+      <v-footer class="justify-center pl-0" height="50px" inset fixed padless>
+        <h1 class="dismiss-all" @click="removeAllPosts()">Dismiss all</h1>
+      </v-footer>
     </v-navigation-drawer>
     <router-view/>
   </v-app>
@@ -20,7 +23,7 @@
 <script>
 // @ is an alias to /src
 import Post from '@/components/Post.vue'
-import {mapState, mapActions} from "vuex"
+import {mapState, mapActions, mapMutations} from "vuex"
 
 export default {
   name: 'Home',
@@ -31,7 +34,10 @@ export default {
     this.fetchPosts();
   },
   computed: {...mapState(["posts"])},
-  methods: {...mapActions(["fetchPosts"])},
+  methods: {
+    ...mapActions(["fetchPosts"]),
+    ...mapMutations(["removeAllPosts"])
+  },
 }
 </script>
 
@@ -42,5 +48,9 @@ export default {
 .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
   opacity: 0;
   transform: translateY(30px);
+}
+
+.dismiss-all {
+  cursor: pointer;
 }
 </style>
