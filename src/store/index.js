@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
@@ -30,16 +31,19 @@ export default new Vuex.Store({
   state: {
     posts: []
   },
+  plugins: [createPersistedState()],
   mutations: {
     setPosts(state, posts) {
       state.posts = posts;
     }
   },
   actions: {
-    async fetchPosts({commit}) {
+    async fetchPosts({state, commit}) {
       try {
-        const posts = await getPosts();
-        commit("setPosts", posts.data.children.map(c => castPost(c.data)));
+        if (!state.posts.length) {
+          const posts = await getPosts();
+          commit("setPosts", posts.data.children.map(c => castPost(c.data)));
+        }
       } catch(_err) {
         commit("setPosts", []);
       }
