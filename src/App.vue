@@ -12,8 +12,13 @@
       <transition-group name="list">
         <Post :post="post" v-for="post of posts" :key="post.id" class="list-item"/>
       </transition-group>
+      <v-row>
+        <v-col :cols="12" class="text-center mb-10">
+          <v-btn outlined @click="fetchNextPosts">Show more</v-btn>
+        </v-col>
+      </v-row>
       <v-footer class="justify-center pl-0" height="50px" inset fixed padless>
-        <h1 class="dismiss-all" @click="removeAllPosts()">Dismiss all</h1>
+        <h1 class="dismiss-all" @click="removeAllPosts">Dismiss all</h1>
       </v-footer>
     </v-navigation-drawer>
     <router-view/>
@@ -35,7 +40,7 @@ export default {
   },
   computed: {...mapState(["posts"])},
   methods: {
-    ...mapActions(["fetchPosts"]),
+    ...mapActions(["fetchPosts", "fetchNextPosts"]),
     ...mapMutations(["removeAllPosts"])
   },
 }

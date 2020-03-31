@@ -25,7 +25,7 @@
       </v-row>
     </template>
     <template v-else>
-      <v-row class="content" style="cursor: auto">
+      <v-row class="content" @click="setViewed(post)">
         <v-col class="post-info pt-0 pl-3" :align-self="'center'">
           <h1>{{post.title}}</h1>
           <span><h6>{{post.created_utc | fromNow}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
@@ -49,7 +49,7 @@ export default {
       return moment(utc).fromNow();
     }
   },
-  methods: {...mapMutations(["setCurrentPost", "removePost"])}
+  methods: {...mapMutations(["setCurrentPost", "removePost", "setViewed"])}
 }
 </script>
 
