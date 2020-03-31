@@ -1,4 +1,4 @@
-const config = require("config");
+const config = require("./config");
 const express = require("express");
 const serveStatic = require("serve-static")
 const path = require("path");
