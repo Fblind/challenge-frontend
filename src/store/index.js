@@ -3,102 +3,47 @@ import Vuex from 'vuex'
 
 Vue.use(Vuex)
 
+// fetch utils
+async function handleResponse(response) {
+  if (!response.ok) {
+    throw new Error("nok fetch response");
+  }
+  return await response.json();
+}
+
+function getPosts() {
+  return fetch("https://www.reddit.com/r/all/top.json?limit=50")
+    .then(handleResponse);
+}
+
+// utils posts
+function castPost(post) {
+  const overrides = {};
+  const invalidThumbnails = ["default", "nsfw", "self"];
+  if (invalidThumbnails.includes(post.thumbnail)) {
+    overrides.thumbnail = null;
+  }
+  return Object.assign(post, overrides);
+}
+
 export default new Vuex.Store({
   state: {
-    posts: [{
-      "domain": "i.imgur.com",
-      "banned_by": null,
-      "media_embed": {},
-      "subreddit": "funny",
-      "selftext_html": null,
-      "selftext": "",
-      "likes": null,
-      "user_reports": [],
-      "secure_media": null,
-      "link_flair_text": null,
-      "id": "2hqlxp",
-      "gilded": 0,
-      "secure_media_embed": {},
-      "clicked": false,
-      "report_reasons": null,
-      "author": "washedupwornout",
-      "media": null,
-      "score": 4841,
-      "approved_by": null,
-      "over_18": false,
-      "hidden": false,
-      "thumbnail": "http://b.thumbs.redditmedia.com/9N1f7UGKM5fPZydrsgbb4_SUyyLW7A27um1VOygY3LM.jpg",
-      "subreddit_id": "t5_2qh33",
-      "edited": false,
-      "link_flair_css_class": null,
-      "author_flair_css_class": null,
-      "downs": 0,
-      "mod_reports": [],
-      "saved": false,
-      "is_self": false,
-      "name": "t3_2hqlxp",
-      "permalink": "/r/funny/comments/2hqlxp/man_trying_to_return_a_dogs_toy_gets_tricked_into/",
-      "stickied": false,
-      "created": 1411975314,
-      "url": "http://i.imgur.com/4CHXnj2.gif",
-      "author_flair_text": null,
-      "title": "Man trying to return a dog's toy gets tricked into playing fetch",
-      "created_utc": 1411946514,
-      "ups": 4841,
-      "num_comments": 958,
-      "visited": false,
-      "num_reports": null,
-      "distinguished": null
-    }, {
-      "domain": "alphagalileo.org",
-      "banned_by": null,
-      "media_embed": {},
-      "subreddit": "science",
-      "selftext_html": null,
-      "selftext": "",
-      "likes": null,
-      "user_reports": [],
-      "secure_media": null,
-      "link_flair_text": "Social Sciences",
-      "id": "2hozly",
-      "gilded": 0,
-      "secure_media_embed": {},
-      "clicked": false,
-      "report_reasons": null,
-      "author": "mubukugrappa",
-      "media": null,
-      "score": 4498,
-      "approved_by": null,
-      "over_18": false,
-      "hidden": false,
-      "thumbnail": "",
-      "subreddit_id": "t5_mouw",
-      "edited": false,
-      "link_flair_css_class": "soc",
-      "author_flair_css_class": null,
-      "downs": 0,
-      "mod_reports": [],
-      "saved": false,
-      "is_self": false,
-      "name": "t3_2hozly",
-      "permalink": "/r/science/comments/2hozly/the_secret_to_raising_well_behaved_teens_maximise/",
-      "stickied": false,
-      "created": 1411937584,
-      "url": "http://www.alphagalileo.org/ViewItem.aspx?ItemId=145707&amp;CultureCode=en",
-      "author_flair_text": null,
-      "title": "The secret to raising well behaved teens? Maximise their sleep: While paediatricians warn sleep deprivation can stack the deck against teenagers, a new study reveals youth’s irritability and laziness aren’t down to attitude problems but lack of sleep",
-      "created_utc": 1411908784,
-      "ups": 4498,
-      "num_comments": 3740,
-      "visited": false,
-      "num_reports": null,
-      "distinguished": null
-    }]
+    posts: []
   },
   mutations: {
-
+    setPosts(state, posts) {
+      state.posts = posts;
+    }
   },
   actions: {
+    async fetchPosts({commit}) {
+      try {
+        const posts = await getPosts();
+        commit("setPosts", posts.data.children.map(c => castPost(c.data)));
+      } catch(_err) {
+        commit("setPosts", []);
+      }
+    }
   },
   modules: {
   }
