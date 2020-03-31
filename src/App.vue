@@ -1,5 +1,46 @@
 <template>
   <v-app>
+    <v-navigation-drawer app width="500">
+      <v-list-item>
+        <v-list-item-content>
+          <v-list-item-title class="title">
+            Reddit Posts
+          </v-list-item-title>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider></v-divider>
+      <transition-group name="list">
+        <Post :post="post" v-for="post of posts" :key="post.id" class="list-item"/>
+      </transition-group>
+    </v-navigation-drawer>
     <router-view/>
   </v-app>
 </template>
+
+<script>
+// @ is an alias to /src
+import Post from '@/components/Post.vue'
+import {mapState, mapActions} from "vuex"
+
+export default {
+  name: 'Home',
+  components: {
+    Post,
+  },
+  created() {
+    this.fetchPosts();
+  },
+  computed: {...mapState(["posts"])},
+  methods: {...mapActions(["fetchPosts"])},
+}
+</script>
+
+<style>
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>

@@ -29,19 +29,21 @@ function castPost(post) {
 
 export default new Vuex.Store({
   state: {
-    posts: []
+    posts: [],
+    currentPost: null,
   },
   plugins: [createPersistedState()],
   mutations: {
     setPosts(state, posts) {
       state.posts = posts;
     },
-    setPostViewed(state, post) {
-      const postIndex = state.posts.findIndex(p => p.id === post.id);
-      state.posts[postIndex].viewed = true;
-    },
     removePost(state, post) {
       state.posts.splice(state.posts.indexOf(post), 1);
+    },
+    setCurrentPost(state, post) {
+      const postIndex = state.posts.findIndex(p => p.id === post.id);
+      state.posts[postIndex].viewed = true;
+      state.currentPost = post;
     }
   },
   actions: {

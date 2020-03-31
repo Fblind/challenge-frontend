@@ -10,18 +10,30 @@
         <v-icon @click="removePost(post)">close</v-icon>
       </v-col>
     </v-row>
-    <v-row class="content" @click="setPostViewed(post)">
-      <v-col :cols="4" class="pt-0 pr-0" v-if="post.thumbnail">
-        <v-img class="thumbnail" :src="post.thumbnail"></v-img>
-      </v-col>
-      <v-col class="post-info pt-0 pl-0" :align-self="'center'" :class="!post.thumbnail ? 'pl-3' : ''">
-        <h1>{{post.title}}</h1>
-        <span><h6>{{post.created_utc | fromNow}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
-      </v-col>
-      <v-col :cols="1" :align-self="'center'" class="pt-0">
-        <v-icon>chevron_right</v-icon>
-      </v-col>
-    </v-row>
+    <template v-if="post.thumbnail">
+      <v-row class="content" @click="setCurrentPost(post)">
+        <v-col :cols="4" class="pt-0 pr-0">
+          <v-img class="thumbnail" :src="post.thumbnail"></v-img>
+        </v-col>
+        <v-col class="post-info pt-0 pl-0" :align-self="'center'">
+          <h1>{{post.title}}</h1>
+          <span><h6>{{post.created_utc | fromNow}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
+        </v-col>
+        <v-col :cols="1" :align-self="'center'" class="pt-0">
+          <v-icon>chevron_right</v-icon>
+        </v-col>
+      </v-row>
+    </template>
+    <template v-else>
+      <v-row class="content" style="cursor: auto">
+        <v-col class="post-info pt-0 pl-3" :align-self="'center'">
+          <h1>{{post.title}}</h1>
+          <span><h6>{{post.created_utc | fromNow}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
+        </v-col>
+        <v-col :cols="1" :align-self="'center'" class="pt-0">
+        </v-col>
+      </v-row>
+    </template>
   </v-container>
 </template>
 
@@ -37,7 +49,7 @@ export default {
       return moment(utc).fromNow();
     }
   },
-  methods: {...mapMutations(["setPostViewed", "removePost"])}
+  methods: {...mapMutations(["setCurrentPost", "removePost"])}
 }
 </script>
 
