@@ -42,6 +42,7 @@ export default new Vuex.Store({
   state: {
     posts: [],
     currentPost: null,
+    drawer: true,
   },
   plugins: [createPersistedState()],
   mutations: {
@@ -69,6 +70,9 @@ export default new Vuex.Store({
     setViewed(state, post) {
       const postIndex = state.posts.findIndex(p => p.id === post.id);
       state.posts[postIndex].viewed = true;
+    },
+    setDrawer(state, visibility) {
+      state.drawer = visibility;
     }
   },
   actions: {
@@ -82,8 +86,11 @@ export default new Vuex.Store({
         commit("setPosts", []);
       }
     },
-    async fetchNextPosts({state, commit}) {
+    async fetchNextPosts({state, commit, dispatch}) {
       const lastPost = state.posts[state.posts.length - 1];
+      if (!lastPost) {
+        return dispatch("fetchPosts");
+      }
       const posts = await getPosts({next: lastPost.name});
       commit("addPosts", posts.data.children.map(c => castPost(c.data)));
     }

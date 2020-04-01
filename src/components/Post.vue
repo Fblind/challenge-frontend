@@ -6,12 +6,12 @@
       </v-col>
       <v-col class="pb-1">
       </v-col>
-      <v-col :cols="1" class="pb-1">
+      <v-col :cols="1" class="pb-1 mr-2">
         <v-icon @click="removePost(post)">close</v-icon>
       </v-col>
     </v-row>
     <template v-if="post.thumbnail">
-      <v-row class="content" @click="setCurrentPost(post)">
+      <v-row class="content" @click="setViewedPost(post)">
         <v-col :cols="4" class="pt-0 pr-0">
           <v-img class="thumbnail" :src="post.thumbnail"></v-img>
         </v-col>
@@ -19,7 +19,7 @@
           <h1>{{post.title}}</h1>
           <span><h6>{{post.created_utc | fromNow}}</h6>     <h6>{{post.num_comments}} comments</h6></span>
         </v-col>
-        <v-col :cols="1" :align-self="'center'" class="pt-0">
+        <v-col :cols="1" :align-self="'center'" class="pt-0 mr-2">
           <v-icon>chevron_right</v-icon>
         </v-col>
       </v-row>
@@ -49,7 +49,20 @@ export default {
       return moment(utc).fromNow();
     }
   },
-  methods: {...mapMutations(["setCurrentPost", "removePost", "setViewed"])}
+  methods: {
+    ...mapMutations(["setCurrentPost", "removePost", "setViewed", "setDrawer"]),
+    setViewedPost(post) {
+      // if tablet or mobile
+      if (window.innerWidth <= 1024) {
+        this.setDrawer(false);
+      }
+      if (post.thumbnail) {
+        this.setCurrentPost(post);
+      } else {
+        this.setViewed(post);
+      }
+    }
+  },
 }
 </script>
 
@@ -76,6 +89,15 @@ export default {
   height: 100px;
   width: 100px;
   box-shadow: -2px 11px 13px rgba(0, 0, 0, 0.5);
+}
+
+@media only screen and (max-width: 600px) {
+  .post-item .thumbnail {
+    border-radius: 50%;
+    height: 80px;
+    width: 80px;
+    box-shadow: -2px 11px 13px rgba(0, 0, 0, 0.5);
+  }
 }
 
 .post-item .post-info h1 {

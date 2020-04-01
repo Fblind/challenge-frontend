@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer app width="500">
+    <v-navigation-drawer app width="500" v-model="drawerModel">
       <v-list-item>
         <v-list-item-content>
           <v-list-item-title class="title">
@@ -38,10 +38,20 @@ export default {
   created() {
     this.fetchPosts();
   },
-  computed: {...mapState(["posts"])},
+  computed: {
+    ...mapState(["posts", "drawer"]),
+    drawerModel: {
+      get() {
+        return this.drawer;
+      },
+      set(value) {
+        this.setDrawer(value);
+      }
+    }
+  },
   methods: {
     ...mapActions(["fetchPosts", "fetchNextPosts"]),
-    ...mapMutations(["removeAllPosts"])
+    ...mapMutations(["removeAllPosts", "setDrawer"])
   },
 }
 </script>
